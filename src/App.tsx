@@ -18,13 +18,31 @@ const App: React.FC = () =>  {
     setTodos(prev => [newTodo, ...prev]);
   }
 
+  const toggleHandler = ( id: number ) => {
+    setTodos(prev => 
+      prev.map(todo => {
+        if (todo.id === id) {
+          todo = {...todo, completed: !todo.completed}; //if i just do todo.completed = !todo.completed - doesn't work
+        }
+        return todo;
+      })
+    )
+  }
+
+  const removeHandler = (id: number) => {
+    const shouldRemove = window.confirm('Вы уверены, что хотите удалить элемент?')
+    if (shouldRemove) {
+      setTodos(prev => prev.filter(todo => todo.id !== id))
+    }
+  }
+
   return (
     <>
     <Navbar />
     <div className="container">
       <TodoForm onAdd={addHandler} />
 
-      <TodoList todos={todos} />
+      <TodoList todos={todos} onToggle={toggleHandler} onRemove={removeHandler} />
     </div>
     </>
   );
